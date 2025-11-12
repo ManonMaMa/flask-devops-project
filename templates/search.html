@@ -1,7 +1,35 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-    <p>ceci est le formulaire de recherche de videos : route /videos/search</p>
-
+    <div>
+        <form   id="form-video-search"
+                name="video-search"
+                method="POST"
+                >
+            <label  for="input-search-terms">Quelle vidéo recherchez-vous ?</label>
+            <input  id="input-search-terms"
+                    name="search-terms"
+                    type="text"
+                    />
+            <button  type="submit">Rechercher</button>
+        </form>
+    </div>
+    
+    <h3>Liste de résultats</h3>
+    {% if videos|length %}
+    <p>video for everyone !</p>
+    <ul>
+        {% for video in videos %}
+            <li>
+                <div class="card">
+                    <a href="{{ video.url }}" target="_blank">{{ video.title }}</a>
+                    <p> Nombre de vues : {{ video.views }}</p>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No video, mmh? </p>
+    {% endif %}
+    
 {% endblock content %}

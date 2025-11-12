@@ -1,5 +1,6 @@
-import json, os
+import json, re
 from flask import Flask, request, render_template, redirect
+
 
 # Lors du développement d'une app Flask, mettre :
 #       les fichiers HTML dans un dossier templates/
@@ -7,6 +8,7 @@ from flask import Flask, request, render_template, redirect
 
 # Création de l'application Flask (on indique que ce fichier est le fichier principal).
 app = Flask(__name__)       # __name__ : variable spéciale de python contenant le nom de ce fichier.
+
 
 @app.route("/")     # Définition de la route principale : http://127.0.0.1:5050/
 def index():
@@ -19,12 +21,23 @@ def affiche_videos():
         videos = json.load(f)
     return render_template("videos.html", videos=videos)
 
-@app.route("/videos/search")
+@app.route("/videos/search", methods=["GET","POST"])
 def search():
     # Rechercher des vidéos par titre  
     # Affiche un formulaire de recherche et les résultats de recherche. 
-
-    return render_template('search.html')
+    with open("./videos.json","r", encoding="utf-8") as jsonfile:
+        videos = json.load(jsonfile)
+        
+    if request.method == "POST":
+        try: 
+            search_string = re.compile(request.form.get("search-terms"), re.IGNORECASE)
+        except re.error:
+            search_string = re.compile(r".*")
+        # re.search return None if no match, hence false when tested
+        matched_videos = [ video for video in videos if search_string.search(video["title"]) ] 
+        videos = matched_videos
+        
+    return render_template('search.html', videos=videos)
 
 @app.route("/videos/add", methods=["GET", "POST"])
 def add():
