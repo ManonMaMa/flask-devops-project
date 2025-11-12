@@ -9,6 +9,7 @@
     {% for video in videos %}
         <li>
             <div class="card">
+                <a href="{{ url_for('details_video', id=video.id) }}">Details</a>
                 <a href="{{ video.url }}" target="_blank">{{ video.title }}</a>
                 <p> Nombre de vues : {{ video.views }}</p>
             </div>

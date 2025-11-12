@@ -65,8 +65,67 @@ def add():
 
 
 @app.route("/videos/<int:id>")
-def video(id):
-    return render_template('details_video.html')
+def details_video(id):
+
+    with open("./videos.json","r", encoding="utf-8") as jsonfile:
+        videos = json.load(jsonfile)
+
+    for video in videos:
+        if video["id"]==id:
+            video_a_afficher = video
+            break
+
+    return render_template('details_video.html', video=video_a_afficher)
+    
+@app.route("/videos/modif", methods=["POST"])
+def modif_video():
+
+    if os.path.exists("videos.json"):
+        with open("videos.json", "r", encoding="utf-8") as f:
+            videos = json.load(f)
+    else:
+        videos = []
+
+    id = int(request.form.get("id"))
+
+    for video in videos:
+        if video["id"]==id:
+            modifier_video = video
+            break
+    
+    title = request.form["title"]
+    url = request.form["url"]
+    views = request.form["views"]
+
+    videos[videos.index(modifier_video)]={"id": id, "title": title, "url": url, "views": views}
+
+    with open("videos.json", "w", encoding="utf-8") as f:
+        json.dump(videos, f, ensure_ascii=False, indent=2)
+    
+    return render_template('videos.html')
+    
+
+@app.route("/videos/delete", methods=["POST"])
+def delete_video():
+    if os.path.exists("videos.json"):
+        with open("videos.json", "r", encoding="utf-8") as f:
+            videos = json.load(f)
+    else:
+        videos = []
+
+    id = request.form["id"]
+
+    for video in videos:
+        if video["id"]==id:
+            supprimer_video = video
+            break
+
+    videos.remove(supprimer_video)
+
+    with open("videos.json", "w", encoding="utf-8") as f:
+        json.dump(videos, f, ensure_ascii=False, indent=2)
+
+    return render_template('videos.html')
 
 
 # Lancement du serveur : mode debug et hot reload actif.

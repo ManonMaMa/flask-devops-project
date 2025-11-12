@@ -2,6 +2,28 @@
 
 {% block content %}
 
-    <p>ceci la page de details de la video : route /videos/"<int:id>"</p>
+    <a href="{{ url_for('affiche_videos') }}">Retour</a> 
+
+    <p>ceci la page de details de la video : route /videos/"{{ video.id }}"</p>
+
+    <form action="{{ url_for('modif_video') }}" method="post">
+        <label for="id">ID :</label>
+        <input type="text" id="id" name="id" value="{{ video.id }}" readonly>
+        <br><br>
+
+        <label for="title">Titre :</label>
+        <input type="text" id="title" name="title" value="{{ video.title }}" required>
+        <br><br>
+
+        <label for="url">URL :</label>
+        <input type="url" id="url" name="url" value="{{ video.url }}" required><br><br>
+
+        <label for="views">Views :</label>
+        <input type="text" id="views" name="views" value="{{ video.views }}" required><br><br>
+
+        <button type="submit">modifier</button>
+    </form>
+
+    <button formaction="{{ url_for('delete_video') }}" name="id" value="{{ video.id }}">Delete</button>
 
 {% endblock content %}
