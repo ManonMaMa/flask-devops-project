@@ -2,6 +2,8 @@
 
 {% block content %}
 
+    <a href="{{ url_for('add') }}">Ajouter une video</a> 
+
     <h1>Liste des videos</h1>
 
     {% for video in videos %}

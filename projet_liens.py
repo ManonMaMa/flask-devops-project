@@ -1,5 +1,5 @@
-import json
-from flask import Flask, request, render_template
+import json, os
+from flask import Flask, request, render_template, redirect
 
 # Lors du développement d'une app Flask, mettre :
 #       les fichiers HTML dans un dossier templates/
@@ -26,16 +26,30 @@ def search():
 
     return render_template('search.html')
 
-@app.route("/videos/add")
+@app.route("/videos/add", methods=["GET", "POST"])
 def add():
     if request.method == 'POST':
-        # route qui permet d'ajouter une nouvelle vidéo à la playlist
+        title = request.form["title"]
+        url = request.form["url"]
+        views = 0
 
-        return render_template('add.html')
+        if os.path.exists("videos.json"):
+            with open("videos.json", "r", encoding="utf-8") as f:
+                videos = json.load(f)
+        else:
+            videos = []
+
+        new_id = max([v["id"] for v in videos], default=0) + 1
+        videos.append({"id": new_id, "title": title, "url": url, "views": views})
+
+        with open("videos.json", "w", encoding="utf-8") as f:
+            json.dump(videos, f, ensure_ascii=False, indent=2)
+
+        return redirect("/videos")
+
     if request.method == 'GET':
-        # Affiche le formulaire pour ajouter une nouvelle video. 
-
         return render_template('add.html')
+
 
 @app.route("/videos/<int:id>")
 def video(id):
