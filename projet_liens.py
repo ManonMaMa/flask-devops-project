@@ -36,7 +36,7 @@ def add():
 
 @app.route("/videos/<int:id>")
 def video(id):
-    return render_template('details_video.html', id)
+    return render_template('details_video.html')
 
 
 # Lancement du serveur : mode debug et hot reload actif.
