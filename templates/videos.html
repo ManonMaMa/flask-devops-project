@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <p>ceci est la liste des videos : route /videos</p>
+    <!-- <a class="retouraccueil" href="/">
+        <img class="imageretour" 
+            src="{{url_for('static', filename='img/OIP.webp')}}" 
+            alt="bouton retour à l'accueil">
+    </a>
+
+    <div class="titre">Galerie Pokemon</div>
+    
+    {% if is_not_empty %}
+        {% for pokemon in liste_pokemons %}
+            <div class="cards">
+                <p class='nom_pokemon'> {{ pokemon.nom_pokemon }} </p>
+                <img class='imgcards' src="{{url_for('static', filename=pokemon.image_pokemon)}}" alt="Voici le nom de l'image : {{image_pokemon}}">
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class='vide'>La galerie est vide</p>
+    {% endif %} -->
+
+{% endblock content %}

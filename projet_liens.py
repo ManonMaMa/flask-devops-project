@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, request, render_template
 
 # Lors du développement d'une app Flask, mettre :
 #       les fichiers HTML dans un dossier templates/
@@ -12,26 +12,31 @@ def index():
     """Retourne le fichier index.html du dossier templates/ grâce à la fonction render_template() de Flask."""
     return render_template('index.html')
 
-@app.route("/")     # Définition de la route principale : http://127.0.0.1:5050/
-def index():
-    """Retourne le fichier index.html du dossier templates/ grâce à la fonction render_template() de Flask."""
-    return render_template('index.html')
-
 @app.route("/videos")
 def affiche_videos():
     return render_template('videos.html')
 
 @app.route("/videos/search")
 def search():
+    # Rechercher des vidéos par titre  
+    # Affiche un formulaire de recherche et les résultats de recherche. 
+
     return render_template('search.html')
 
 @app.route("/videos/add")
 def add():
-    return render_template('add.html')
+    if request.method == 'POST':
+        # route qui permet d'ajouter une nouvelle vidéo à la playlist
+
+        return render_template('add.html')
+    if request.method == 'GET':
+        # Affiche le formulaire pour ajouter une nouvelle video. 
+
+        return render_template('add.html')
 
 @app.route("/videos/<int:id>")
-def video():
-    return id
+def video(id):
+    return render_template('details_video.html', id)
 
 
 # Lancement du serveur : mode debug et hot reload actif.
