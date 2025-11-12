@@ -1,0 +1,16 @@
+.card{
+    background-color: rgb(6, 169, 169);
+    border-radius: 1vw;
+    display: flex;
+    height: 3vw;
+    width: 20vw;
+    align-items: center;
+    justify-content: space-between;
+    padding-left: 1vw;
+    padding-right: 1vw;
+    margin-top: 0.2vw;
+}
+
+a{
+    color: darkblue
+}

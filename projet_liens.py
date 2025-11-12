@@ -1,3 +1,4 @@
+import json
 from flask import Flask, request, render_template
 
 # Lors du développement d'une app Flask, mettre :
@@ -14,7 +15,9 @@ def index():
 
 @app.route("/videos")
 def affiche_videos():
-    return render_template('videos.html')
+    with open("./videos.json", "r", encoding="utf-8") as f:
+        videos = json.load(f)
+    return render_template("videos.html", videos=videos)
 
 @app.route("/videos/search")
 def search():

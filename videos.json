@@ -1,20 +1,20 @@
-[ 
-{ 
-"id": 1, 
-"url": "https://boardgamearena.com/", 
-"title": "Plateforme de jeux", 
-"views": 0 
-}
-{ 
-"id": 2, 
-"url": "https://boardgamearena.com/", 
-"title": "Deuxieme Plateforme de jeux", 
-"views": 0 
-} 
-{ 
-"id": 3, 
-"url": "https://docs.google.com/spreadsheets/d/12CA3WTSu_3GZxcpmH6gO6et8YDtSVnsaK0OrkQi2phI/edit?gid=1772287150#gid=1772287150", 
-"title": "Journal de bord", 
-"views": 0 
-}  
+[
+    { 
+    "id": 1, 
+    "url": "https://boardgamearena.com/", 
+    "title": "Plateforme de jeux", 
+    "views": 0 
+    },
+    { 
+    "id": 2, 
+    "url": "https://boardgamearena.com/", 
+    "title": "Deuxieme Plateforme de jeux", 
+    "views": 0 
+    },
+    { 
+    "id": 3, 
+    "url": "https://docs.google.com/spreadsheets/d/12CA3WTSu_3GZxcpmH6gO6et8YDtSVnsaK0OrkQi2phI/edit?gid=1772287150#gid=1772287150", 
+    "title": "Journal de bord", 
+    "views": 0 
+    }  
 ]
