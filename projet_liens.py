@@ -9,6 +9,29 @@ from flask import Flask, request, render_template, redirect
 # Création de l'application Flask (on indique que ce fichier est le fichier principal).
 app = Flask(__name__)       # __name__ : variable spéciale de python contenant le nom de ce fichier.
 
+PLAYLIST_PATH = "videos.json"
+
+def json_videos_loader (path:str=PLAYLIST_PATH) -> list:
+    list_videos = []
+    if os.path.exists(path):
+        with open(path, "r", encoding="utf-8") as f:
+            list_videos = json.load(f)
+    else:
+        print("file error: Json data file for playlist not found")
+    return list_videos
+
+def json_videos_saver (list_videos:list, path:str=PLAYLIST_PATH) -> None:
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(list_videos, f, ensure_ascii=False, indent=2)
+    return None
+
+def search_video_by_id (list_videos:list, identifiant:int) -> dict:
+    for video in list_videos:
+        if video["id"]== identifiant:
+            return video
+    ## If not found
+    return dict()
+
 
 @app.route("/")     # Définition de la route principale : http://127.0.0.1:5050/
 def index():
@@ -17,16 +40,14 @@ def index():
 
 @app.route("/videos")
 def affiche_videos():
-    with open("./videos.json", "r", encoding="utf-8") as f:
-        videos = json.load(f)
+    videos = json_videos_loader()
     return render_template("videos.html", videos=videos)
 
 @app.route("/videos/search", methods=["GET","POST"])
 def search():
     # Rechercher des vidéos par titre  
     # Affiche un formulaire de recherche et les résultats de recherche. 
-    with open("./videos.json","r", encoding="utf-8") as jsonfile:
-        videos = json.load(jsonfile)
+    videos = json_videos_loader()
         
     if request.method == "POST":
         try: 
@@ -34,7 +55,10 @@ def search():
         except re.error:
             search_string = re.compile(r".*")
         # re.search return None if no match, hence false when tested
-        matched_videos = [ video for video in videos if search_string.search(video["title"]) ] 
+        matched_videos = [ video 
+                          for video in videos 
+                          if search_string.search(video["title"]) 
+                         ] 
         videos = matched_videos
         
     return render_template('search.html', videos=videos)
@@ -42,22 +66,16 @@ def search():
 @app.route("/videos/add", methods=["GET", "POST"])
 def add():
     if request.method == 'POST':
+        videos = json_videos_loader()
+
         title = request.form["title"]
         url = request.form["url"]
         views = 0
-
-        if os.path.exists("videos.json"):
-            with open("videos.json", "r", encoding="utf-8") as f:
-                videos = json.load(f)
-        else:
-            videos = []
-
         new_id = max([v["id"] for v in videos], default=0) + 1
+
         videos.append({"id": new_id, "title": title, "url": url, "views": views})
-
-        with open("videos.json", "w", encoding="utf-8") as f:
-            json.dump(videos, f, ensure_ascii=False, indent=2)
-
+        json_videos_saver(videos)
+        
         return redirect("/videos")
 
     if request.method == 'GET':
@@ -67,63 +85,35 @@ def add():
 @app.route("/videos/<int:id>")
 def details_video(id):
 
-    with open("./videos.json","r", encoding="utf-8") as jsonfile:
-        videos = json.load(jsonfile)
-
-    for video in videos:
-        if video["id"]==id:
-            video_a_afficher = video
-            break
-
+    videos = json_videos_loader()
+    video_a_afficher = search_video_by_id(videos, id)
     return render_template('details_video.html', video=video_a_afficher)
     
 @app.route("/videos/modif", methods=["POST"])
 def modif_video():
 
-    if os.path.exists("videos.json"):
-        with open("videos.json", "r", encoding="utf-8") as f:
-            videos = json.load(f)
-    else:
-        videos = []
+    videos = json_videos_loader()
 
     id = int(request.form.get("id"))
-
-    for video in videos:
-        if video["id"]==id:
-            modifier_video = video
-            break
-    
     title = request.form["title"]
     url = request.form["url"]
     views = request.form["views"]
 
-    videos[videos.index(modifier_video)]={"id": id, "title": title, "url": url, "views": views}
-
-    with open("videos.json", "w", encoding="utf-8") as f:
-        json.dump(videos, f, ensure_ascii=False, indent=2)
+    old_video_position=videos.index(search_video_by_id(videos, id))
+    
+    videos[old_video_position]={"id": id, "title": title, "url": url, "views": views}
+    json_videos_saver(videos)
     
     return redirect("/videos")
     
 
 @app.route("/videos/delete", methods=["POST"])
 def delete_video():
-    if os.path.exists("videos.json"):
-        with open("videos.json", "r", encoding="utf-8") as f:
-            videos = json.load(f)
-    else:
-        videos = []
-
+    
+    videos = json_videos_loader(PLAYLIST_PATH)
     id = int(request.form["id"])
-
-    for video in videos:
-        if video["id"]==id:
-            supprimer_video = video
-            break
-
-    videos.remove(supprimer_video)
-
-    with open("videos.json", "w", encoding="utf-8") as f:
-        json.dump(videos, f, ensure_ascii=False, indent=2)
+    videos.remove(search_video_by_id(videos, id))
+    json_videos_saver(videos)
 
     return redirect("/videos")
 
