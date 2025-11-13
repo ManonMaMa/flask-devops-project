@@ -102,7 +102,7 @@ def modif_video():
     with open("videos.json", "w", encoding="utf-8") as f:
         json.dump(videos, f, ensure_ascii=False, indent=2)
     
-    return render_template('videos.html')
+    return redirect("/videos")
     
 
 @app.route("/videos/delete", methods=["POST"])
@@ -113,7 +113,7 @@ def delete_video():
     else:
         videos = []
 
-    id = request.form["id"]
+    id = int(request.form["id"])
 
     for video in videos:
         if video["id"]==id:
@@ -125,7 +125,7 @@ def delete_video():
     with open("videos.json", "w", encoding="utf-8") as f:
         json.dump(videos, f, ensure_ascii=False, indent=2)
 
-    return render_template('videos.html')
+    return redirect("/videos")
 
 
 # Lancement du serveur : mode debug et hot reload actif.

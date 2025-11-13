@@ -2,6 +2,12 @@
 
 {% block content %}
 
+    <h1>Mes videos</h1>
+
     <p>ceci est la page d'accueil : chemin : / </p>
+
+    <a href="{{ url_for('affiche_videos') }}">Afficher le contenu</a> 
+
+    <a href="{{ url_for('add') }}">Ajouter une video</a> 
 
 {% endblock content %}

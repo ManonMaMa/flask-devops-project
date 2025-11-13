@@ -21,9 +21,12 @@
         <label for="views">Views :</label>
         <input type="text" id="views" name="views" value="{{ video.views }}" required><br><br>
 
-        <button type="submit">modifier</button>
+        <button type="submit">Modifier</button>
     </form>
 
-    <button formaction="{{ url_for('delete_video') }}" name="id" value="{{ video.id }}">Delete</button>
+    <form action="{{ url_for('delete_video') }}" method="post">
+        <input name="id" value="{{ video.id }}" type="hidden" readonly>
+        <button type="submit">Delete</button>
+    </form>
 
 {% endblock content %}

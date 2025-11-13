@@ -3,7 +3,7 @@
     border-radius: 1vw;
     display: flex;
     height: 3vw;
-    width: 20vw;
+    width: 30vw;
     align-items: center;
     justify-content: space-between;
     padding-left: 1vw;
@@ -13,4 +13,9 @@
 
 a{
     color: darkblue
+}
+
+img{
+    width: 1.5vw;
+    margin-top: 0.2vw;
 }

@@ -4,12 +4,14 @@
 
     <a href="{{ url_for('add') }}">Ajouter une video</a> 
 
+    <a href="{{ url_for('index') }}">Retour à l'accueil</a> 
+
     <h1>Liste des videos</h1>
 
     {% for video in videos %}
         <li>
             <div class="card">
-                <a href="{{ url_for('details_video', id=video.id) }}">Details</a>
+                <a href="{{ url_for('details_video', id=video.id) }}"><img src="{{url_for('static', filename='img/icone_modif.png')}}"></a>
                 <a href="{{ video.url }}" target="_blank">{{ video.title }}</a>
                 <p> Nombre de vues : {{ video.views }}</p>
             </div>
